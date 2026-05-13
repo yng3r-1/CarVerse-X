@@ -10,11 +10,21 @@
   <style>
     *{margin:0;padding:0;box-sizing:border-box}
     body{
+      scroll-behavior:smooth;
       font-family:Inter,sans-serif;
       background:#050816;
       color:white;
       overflow-x:hidden;
+      position:relative;
       background-image:radial-gradient(circle at top,#1a245f 0%,#050816 50%);
+    }
+
+    #particles{
+      position:fixed;
+      inset:0;
+      width:100%;
+      height:100%;
+      z-index:-2;
     }
 
     .bg-glow{
@@ -72,6 +82,17 @@
       justify-content:space-between;
       padding:0 8%;
       gap:50px;
+    }
+
+    .hero-badge{
+      display:inline-block;
+      padding:10px 18px;
+      border-radius:999px;
+      background:rgba(255,255,255,0.08);
+      border:1px solid rgba(255,255,255,0.1);
+      margin-bottom:20px;
+      color:#7de3ff;
+      font-size:14px;
     }
 
     .hero-text h1{
@@ -260,6 +281,7 @@
   </style>
 </head>
 <body>
+  <canvas id="particles"></canvas>
   <div class="bg-glow"></div>
 
   <nav>
@@ -274,16 +296,47 @@
 
   <section class="hero">
     <div class="hero-text">
+      <div class="hero-badge">NEXT GEN AUTOMOTIVE EXPERIENCE</div>
       <h1>THE FUTURE OF CAR ENGINEERING</h1>
       <p>
         Explore legendary vehicles in cinematic 3D, discover real engineering manuals,
         inspect every engine component, and customize hypercars in a futuristic garage.
       </p>
       <button class="btn">Enter CarVerse</button>
+      <button class="btn" style="margin-left:15px;background:transparent;color:#00d9ff;border:1px solid #00d9ff;box-shadow:none;">Watch Demo</button>
     </div>
 
     <div class="car-showcase">
       <img src="https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?q=80&w=1400&auto=format&fit=crop" alt="Supercar">
+    </div>
+  </section>
+
+  <section style="padding-top:0">
+    <div class="grid">
+      <div class="card">
+        <div class="card-content">
+          <h3>1000+ Cars</h3>
+          <p>Massive real-world automotive archive.</p>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-content">
+          <h3>3D Engineering</h3>
+          <p>Interactive exploded parts system.</p>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-content">
+          <h3>AI Mechanic</h3>
+          <p>Smart diagnostics and repair guidance.</p>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-content">
+          <h3>Manual Library</h3>
+          <p>Factory-style printable repair manuals.</p>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -380,22 +433,37 @@
       <div class="card">
         <div class="card-content">
           <h3>Paint Customizer</h3>
-          <p>Apply matte, chrome, neon, or metallic finishes.</p>
+          <input type="color" id="paintPicker" value="#00d9ff" style="width:100%;height:50px;border:none;border-radius:12px;margin-top:15px;cursor:pointer;">
+          <p style="margin-top:12px">Change showcase glow color instantly.</p>
         </div>
       </div>
 
       <div class="card">
         <div class="card-content">
           <h3>Turbo Tuning</h3>
-          <p>Increase horsepower and monitor torque graphs live.</p>
+          <input type="range" id="hpSlider" min="500" max="2000" value="986" style="width:100%;margin-top:20px;">
+          <p style="margin-top:14px">Horsepower: <span id="hpValue">986</span> HP</p>
         </div>
       </div>
 
       <div class="card">
         <div class="card-content">
           <h3>Suspension Control</h3>
-          <p>Adjust ride height and stance dynamically.</p>
+          <input type="range" id="suspensionSlider" min="0" max="100" value="50" style="width:100%;margin-top:20px;">
+          <p style="margin-top:14px">Ride Height Level: <span id="suspensionValue">50</span></p>
         </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2 class="section-title">AI Mechanic Assistant</h2>
+
+    <div class="card" style="padding:30px;display:flex;flex-direction:column;gap:20px;">
+      <input id="aiInput" placeholder="Ask about engines, tuning, repairs..." style="padding:18px;border:none;border-radius:14px;background:rgba(255,255,255,0.06);color:white;font-size:16px;outline:none;">
+      <button class="btn" onclick="askAI()">Analyze</button>
+      <div id="aiResponse" style="padding:20px;border-radius:16px;background:rgba(255,255,255,0.04);color:#b7c9ff;line-height:1.7;">
+        AI mechanic ready for diagnostics.
       </div>
     </div>
   </section>
@@ -422,6 +490,33 @@
     </div>
   </section>
 
+  <section>
+    <h2 class="section-title">Premium Dashboard</h2>
+
+    <div class="grid">
+      <div class="card">
+        <div class="card-content">
+          <h3>Live Telemetry</h3>
+          <p>Monitor RPM, turbo pressure, engine temperature and fuel mapping.</p>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-content">
+          <h3>Exploded Engine Viewer</h3>
+          <p>Interactive component breakdown system for every engine.</p>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-content">
+          <h3>Documentary Timeline</h3>
+          <p>Explore automotive history from 1900 to 2026.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <footer>
     © 2026 TorqueVerse X — The Ultimate Automotive Universe
   </footer>
@@ -429,19 +524,119 @@
   <script>
     console.log('TorqueVerse X Loaded');
 
+    const canvas = document.getElementById('particles');
+    const ctx = canvas.getContext('2d');
+
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    const particles = [];
+
+    for(let i=0;i<80;i++){
+      particles.push({
+        x:Math.random()*canvas.width,
+        y:Math.random()*canvas.height,
+        r:Math.random()*2,
+        d:Math.random()*1
+      });
+    }
+
+    function animateParticles(){
+      ctx.clearRect(0,0,canvas.width,canvas.height);
+      ctx.fillStyle='rgba(0,217,255,0.5)';
+
+      particles.forEach(p=>{
+        ctx.beginPath();
+        ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+        ctx.fill();
+
+        p.y += p.d;
+
+        if(p.y > canvas.height){
+          p.y = 0;
+        }
+      });
+
+      requestAnimationFrame(animateParticles);
+    }
+
+    animateParticles();
+
+    const paintPicker = document.getElementById('paintPicker');
+    const heroGlow = document.querySelector('.bg-glow');
+    const hpSlider = document.getElementById('hpSlider');
+    const hpValue = document.getElementById('hpValue');
+    const suspensionSlider = document.getElementById('suspensionSlider');
+    const suspensionValue = document.getElementById('suspensionValue');
+    const showcase = document.querySelector('.car-showcase');
+
+    paintPicker.addEventListener('input', () => {
+      heroGlow.style.background = paintPicker.value;
+      heroGlow.style.opacity = '0.3';
+      showcase.style.boxShadow = `0 0 60px ${paintPicker.value}`;
+    });
+
+    hpSlider.addEventListener('input', () => {
+      hpValue.innerText = hpSlider.value;
+      showcase.style.transform = `scale(${1 + hpSlider.value / 5000})`;
+    });
+
+    suspensionSlider.addEventListener('input', () => {
+      suspensionValue.innerText = suspensionSlider.value;
+      showcase.style.marginTop = `${100 - suspensionSlider.value}px`;
+    });
+
     document.querySelectorAll('.card').forEach(card => {
       card.addEventListener('mousemove', e => {
         const rect = card.getBoundingClientRect();
         const x = e.clientX - rect.left;
         const y = e.clientY - rect.top;
 
-        card.style.transform = `rotateY(${(x - rect.width/2)/20}deg) rotateX(${-(y - rect.height/2)/20}deg)`;
+        card.style.transform = `rotateY(${(x - rect.width/2)/20}deg) rotateX(${-(y - rect.height/2)/20}deg) scale(1.03)`;
       });
 
       card.addEventListener('mouseleave', () => {
-        card.style.transform = 'rotateY(0) rotateX(0)';
+        card.style.transform = 'rotateY(0) rotateX(0) scale(1)';
       });
     });
+
+    document.querySelectorAll('nav a').forEach(link => {
+      link.addEventListener('click', e => {
+        e.preventDefault();
+        document.querySelector(link.getAttribute('href')).scrollIntoView({ behavior: 'smooth' });
+      });
+    });
+
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if(entry.isIntersecting){
+          entry.target.animate([
+            { opacity: 0, transform: 'translateY(50px)' },
+            { opacity: 1, transform: 'translateY(0)' }
+          ], {
+            duration: 800,
+            fill: 'forwards'
+          });
+        }
+      });
+    });
+
+    document.querySelectorAll('section').forEach(sec => observer.observe(sec));
+
+    function askAI(){
+      const input = document.getElementById('aiInput').value.toLowerCase();
+      const response = document.getElementById('aiResponse');
+
+      if(input.includes('engine')){
+        response.innerHTML = 'AI Analysis: Twin turbo V8 systems require proper intercooling and ECU optimization for maximum efficiency.';
+      } else if(input.includes('turbo')){
+        response.innerHTML = 'AI Analysis: Turbo tuning increases horsepower but requires upgraded cooling and fuel systems.';
+      } else if(input.includes('brake')){
+        response.innerHTML = 'AI Analysis: Carbon ceramic brakes provide superior heat resistance and stopping power.';
+      } else {
+        response.innerHTML = 'AI Mechanic: System scanned successfully. Explore manuals and engineering modules for more data.';
+      }
+    }
   </script>
 </body>
 </html>

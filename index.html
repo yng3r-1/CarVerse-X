@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TorqueVerse X</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{
+      font-family:Inter,sans-serif;
+      background:#050816;
+      color:white;
+      overflow-x:hidden;
+      background-image:radial-gradient(circle at top,#1a245f 0%,#050816 50%);
+    }
+
+    .bg-glow{
+      position:fixed;
+      width:700px;
+      height:700px;
+      border-radius:50%;
+      background:rgba(0,174,255,0.15);
+      filter:blur(120px);
+      top:-200px;
+      right:-150px;
+      z-index:-1;
+    }
+
+    nav{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      padding:20px 8%;
+      position:sticky;
+      top:0;
+      background:rgba(5,8,22,0.7);
+      backdrop-filter:blur(10px);
+      border-bottom:1px solid rgba(255,255,255,0.08);
+      z-index:100;
+    }
+
+    .logo{
+      font-family:Orbitron;
+      font-size:28px;
+      color:#00d9ff;
+      font-weight:700;
+    }
+
+    nav ul{
+      display:flex;
+      gap:24px;
+      list-style:none;
+    }
+
+    nav a{
+      color:white;
+      text-decoration:none;
+      transition:0.3s;
+    }
+
+    nav a:hover{
+      color:#00d9ff;
+    }
+
+    .hero{
+      min-height:100vh;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      padding:0 8%;
+      gap:50px;
+    }
+
+    .hero-text h1{
+      font-size:72px;
+      line-height:1.1;
+      font-family:Orbitron;
+      margin-bottom:20px;
+    }
+
+    .hero-text p{
+      color:#b5c2ff;
+      max-width:600px;
+      line-height:1.7;
+      margin-bottom:30px;
+    }
+
+    .btn{
+      padding:14px 28px;
+      border:none;
+      border-radius:14px;
+      background:#00d9ff;
+      color:black;
+      font-weight:700;
+      cursor:pointer;
+      transition:0.3s;
+      box-shadow:0 0 30px rgba(0,217,255,0.5);
+    }
+
+    .btn:hover{
+      transform:translateY(-4px);
+    }
+
+    .car-showcase{
+      width:520px;
+      height:520px;
+      border-radius:30px;
+      background:rgba(255,255,255,0.05);
+      backdrop-filter:blur(12px);
+      border:1px solid rgba(255,255,255,0.1);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      position:relative;
+      overflow:hidden;
+      animation:float 6s ease-in-out infinite;
+    }
+
+    .car-showcase img{
+      width:100%;
+      object-fit:cover;
+    }
+
+    @keyframes float{
+      0%,100%{transform:translateY(0)}
+      50%{transform:translateY(-15px)}
+    }
+
+    section{
+      padding:90px 8%;
+    }
+
+    .section-title{
+      font-size:42px;
+      font-family:Orbitron;
+      margin-bottom:40px;
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+      gap:24px;
+    }
+
+    .card{
+      background:rgba(255,255,255,0.05);
+      border:1px solid rgba(255,255,255,0.08);
+      border-radius:24px;
+      overflow:hidden;
+      transition:0.4s;
+      backdrop-filter:blur(10px);
+    }
+
+    .card:hover{
+      transform:translateY(-8px) scale(1.02);
+      box-shadow:0 0 40px rgba(0,217,255,0.2);
+    }
+
+    .card img{
+      width:100%;
+      height:180px;
+      object-fit:cover;
+    }
+
+    .card-content{
+      padding:20px;
+    }
+
+    .specs{
+      display:flex;
+      justify-content:space-between;
+      margin-top:15px;
+      color:#9cb0ff;
+      font-size:14px;
+    }
+
+    .manual-viewer{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:30px;
+      align-items:center;
+    }
+
+    .manual-page{
+      background:white;
+      color:black;
+      padding:30px;
+      border-radius:16px;
+      min-height:450px;
+      box-shadow:0 0 40px rgba(255,255,255,0.1);
+    }
+
+    .manual-page h3{
+      margin-bottom:15px;
+      font-size:28px;
+    }
+
+    .step{
+      padding:14px;
+      border-left:4px solid #00aaff;
+      background:#eef8ff;
+      margin:14px 0;
+      border-radius:8px;
+    }
+
+    .parts-list{
+      display:flex;
+      flex-direction:column;
+      gap:18px;
+    }
+
+    .part-item{
+      background:rgba(255,255,255,0.05);
+      padding:18px;
+      border-radius:16px;
+      border:1px solid rgba(255,255,255,0.08);
+    }
+
+    .feed{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
+      gap:24px;
+    }
+
+    .feed video{
+      width:100%;
+      border-radius:20px;
+    }
+
+    footer{
+      padding:40px;
+      text-align:center;
+      color:#8ea0e8;
+      border-top:1px solid rgba(255,255,255,0.08);
+    }
+
+    @media(max-width:1000px){
+      .hero{
+        flex-direction:column;
+        padding-top:120px;
+        text-align:center;
+      }
+
+      .hero-text h1{
+        font-size:50px;
+      }
+
+      .car-showcase{
+        width:100%;
+        height:auto;
+      }
+
+      .manual-viewer{
+        grid-template-columns:1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="bg-glow"></div>
+
+  <nav>
+    <div class="logo">TorqueVerse X</div>
+    <ul>
+      <li><a href="#cars">Cars</a></li>
+      <li><a href="#manuals">Manuals</a></li>
+      <li><a href="#garage">Garage</a></li>
+      <li><a href="#feed">Media</a></li>
+    </ul>
+  </nav>
+
+  <section class="hero">
+    <div class="hero-text">
+      <h1>THE FUTURE OF CAR ENGINEERING</h1>
+      <p>
+        Explore legendary vehicles in cinematic 3D, discover real engineering manuals,
+        inspect every engine component, and customize hypercars in a futuristic garage.
+      </p>
+      <button class="btn">Enter CarVerse</button>
+    </div>
+
+    <div class="car-showcase">
+      <img src="https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?q=80&w=1400&auto=format&fit=crop" alt="Supercar">
+    </div>
+  </section>
+
+  <section id="cars">
+    <h2 class="section-title">Featured Hypercars</h2>
+
+    <div class="grid">
+      <div class="card">
+        <img src="https://images.unsplash.com/photo-1503376780353-7e6692767b70?q=80&w=1200&auto=format&fit=crop">
+        <div class="card-content">
+          <h3>Ferrari SF90</h3>
+          <p>Hybrid V8 engineering masterpiece with active aerodynamics.</p>
+          <div class="specs">
+            <span>986 HP</span>
+            <span>340 KM/H</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <img src="https://images.unsplash.com/photo-1544636331-e26879cd4d9b?q=80&w=1200&auto=format&fit=crop">
+        <div class="card-content">
+          <h3>Lamborghini Revuelto</h3>
+          <p>Futuristic V12 hybrid hypercar with aggressive design.</p>
+          <div class="specs">
+            <span>1001 HP</span>
+            <span>350 KM/H</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <img src="https://images.unsplash.com/photo-1553440569-bcc63803a83d?q=80&w=1200&auto=format&fit=crop">
+        <div class="card-content">
+          <h3>Bugatti Chiron</h3>
+          <p>Quad turbo W16 engineering icon built for ultimate speed.</p>
+          <div class="specs">
+            <span>1500 HP</span>
+            <span>420 KM/H</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="manuals">
+    <h2 class="section-title">Factory Repair Manuals</h2>
+
+    <div class="manual-viewer">
+      <div class="manual-page">
+        <h3>Ferrari Engine Manual</h3>
+        <p><strong>Engine:</strong> Twin Turbo V8</p>
+
+        <div class="step">
+          Step 1: Disconnect battery and remove engine cover.
+        </div>
+
+        <div class="step">
+          Step 2: Inspect turbo intake and cooling lines.
+        </div>
+
+        <div class="step">
+          Step 3: Torque bolts to manufacturer specifications.
+        </div>
+
+        <div class="step">
+          Step 4: Reassemble intake manifold and test ECU.
+        </div>
+      </div>
+
+      <div class="parts-list">
+        <div class="part-item">
+          <h3>Piston Assembly</h3>
+          <p>Forged aluminum piston with ceramic coating.</p>
+        </div>
+
+        <div class="part-item">
+          <h3>Twin Turbocharger</h3>
+          <p>High-pressure turbo system with intercooling.</p>
+        </div>
+
+        <div class="part-item">
+          <h3>ECU Module</h3>
+          <p>Main engine control system with performance mapping.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="garage">
+    <h2 class="section-title">Mod Garage</h2>
+
+    <div class="grid">
+      <div class="card">
+        <div class="card-content">
+          <h3>Paint Customizer</h3>
+          <p>Apply matte, chrome, neon, or metallic finishes.</p>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-content">
+          <h3>Turbo Tuning</h3>
+          <p>Increase horsepower and monitor torque graphs live.</p>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-content">
+          <h3>Suspension Control</h3>
+          <p>Adjust ride height and stance dynamically.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="feed">
+    <h2 class="section-title">Car Media Feed</h2>
+
+    <div class="feed">
+      <div class="card">
+        <img src="https://images.unsplash.com/photo-1511919884226-fd3cad34687c?q=80&w=1200&auto=format&fit=crop">
+        <div class="card-content">
+          <h3>Night Drive Reel</h3>
+          <p>Cyberpunk Tokyo Ferrari build showcase.</p>
+        </div>
+      </div>
+
+      <div class="card">
+        <img src="https://images.unsplash.com/photo-1503736334956-4c8f8e92946d?q=80&w=1200&auto=format&fit=crop">
+        <div class="card-content">
+          <h3>Engine Documentary</h3>
+          <p>Inside the legendary Porsche flat-six engine.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    © 2026 TorqueVerse X — The Ultimate Automotive Universe
+  </footer>
+
+  <script>
+    console.log('TorqueVerse X Loaded');
+
+    document.querySelectorAll('.card').forEach(card => {
+      card.addEventListener('mousemove', e => {
+        const rect = card.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+
+        card.style.transform = `rotateY(${(x - rect.width/2)/20}deg) rotateX(${-(y - rect.height/2)/20}deg)`;
+      });
+
+      card.addEventListener('mouseleave', () => {
+        card.style.transform = 'rotateY(0) rotateX(0)';
+      });
+    });
+  </script>
+</body>
+</html>
